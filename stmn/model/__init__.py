@@ -1,1 +1,0 @@
-from .stmn_3d import STMN
