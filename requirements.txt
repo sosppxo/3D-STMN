@@ -1,0 +1,13 @@
+gorilla-core
+numba
+open3d
+opencv-python
+plyfile
+scipy
+tensorboard
+tensorboardX
+tqdm
+yapf
+dgl-cu111==0.6.1
+stanfordcorenlp
+transformers==4.31.0
