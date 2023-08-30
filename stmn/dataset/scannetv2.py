@@ -50,6 +50,7 @@ class ScanNetDataset_sample_graph_edge(Dataset):
                  with_label=True,
                  mode=4,
                  with_elastic=True,
+                 aug=False,
                  use_xyz=True,
                  logger=None,
                  max_des_len=78,
@@ -63,6 +64,7 @@ class ScanNetDataset_sample_graph_edge(Dataset):
         self.with_label = with_label
         self.mode = mode
         self.with_elastic = with_elastic
+        self.aug = aug
         self.use_xyz = use_xyz
         self.logger = logger
         self.max_des_len = max_des_len
@@ -208,7 +210,10 @@ class ScanNetDataset_sample_graph_edge(Dataset):
             return xyz, rgb, superpoint, dummy_sem_label, dummy_inst_label
         
     def transform_train(self, xyz, rgb, superpoint, semantic_label, instance_label):
-        xyz_middle = self.data_aug(xyz, True, True, True)
+        if self.aug:
+            xyz_middle = self.data_aug(xyz, True, True, True)
+        else:
+            xyz_middle = xyz.copy()
         rgb += np.random.randn(3) * 0.1
         xyz = xyz_middle * self.voxel_cfg.scale
         if self.with_elastic:
