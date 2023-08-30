@@ -167,9 +167,11 @@ def main(args):
         cfg.work_dir = osp.join('./exps', osp.splitext(osp.basename(args.config))[0], timestamp)
     os.makedirs(osp.abspath(cfg.work_dir), exist_ok=True)
     log_file = osp.join(cfg.work_dir, f'{timestamp}.log')
-    logger = get_root_logger(log_file=log_file)
     if gorilla.is_main_process():
+        logger = get_root_logger(log_file=log_file)
         logger.info(f'config: {args.config}')
+    else:
+        logger = None
     shutil.copy(args.config, osp.join(cfg.work_dir, osp.basename(args.config)))
     writer = SummaryWriter(cfg.work_dir)
 
