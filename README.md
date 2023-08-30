@@ -115,13 +115,18 @@ Download [SPFormer](?????????????????) pretrained model (We only use the Sparse 
 Move the pretrained model to backbones.
 ```
 mkdir backbones
-mv ${Download_PATH}/spf_scannet_512_ref_backbone.pth backbones/
+mv ${Download_PATH}/sp_unet_backbone.pth backbones/
 ```
 
 ## Training
+For single GPU (40G):
 
 ```
 bash scripts/train.sh
+```
+For multi-GPU (11G * 4 or 24G * 2):
+```
+bash scripts/train_multi_gpu.sh
 ```
 
 ## Inference
@@ -132,36 +137,16 @@ Download [3D-STMN](????????????) pretrain model and move it to checkpoints.
 bash scripts/test.sh
 ```
 
-## Visualization
-
-Before visualization, you need to write the output results of inference.
-
-```
-python tools/test.py configs/spf_scannet.yaml ${CHECKPOINT} --out ${SAVE_PATH}
-```
-
-After inference, run visualization by execute the following command. 
-
-```
-python tools/visualization.py --prediction_path ${SAVE_PATH}
-```
-
-You can visualize by Open3D or visualize saved `.ply` files on MeshLab. Arguments explaination can be found in `tools/visualiztion.py`.
-
 ## Citation
 
 If you find this work useful in your research, please cite:
 
 ```
-@misc{2211.15766,
-Author = {Jiahao Sun and Chunmei Qing and Junpeng Tan and Xiangmin Xu},
-Title = {Superpoint Transformer for 3D Scene Instance Segmentation},
-Year = {2022},
-Eprint = {arXiv:2211.15766},
+@misc{
 }
 ```
 
 ## Ancknowledgement
 
-Sincerely thanks for [SoftGroup](https://github.com/thangvubk/SoftGroup) and [SSTNet](https://github.com/Gorilla-Lab-SCUT/SSTNet) repos. This repo is build upon them.
+Sincerely thanks for [SoftGroup](https://github.com/thangvubk/SoftGroup) [SSTNet](https://github.com/Gorilla-Lab-SCUT/SSTNet) and [SPFormer](https://github.com/sunjiahao1999/SPFormer) repos. This repo is build upon them.
 
