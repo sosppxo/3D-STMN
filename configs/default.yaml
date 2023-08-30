@@ -31,7 +31,7 @@ data:
     data_root: data/
     prefix: train
     suffix: .pth
-    training: True
+    training: False # not use augmentation
     mode: 4
     with_elastic: False
     use_xyz: True
