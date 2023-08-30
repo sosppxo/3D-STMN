@@ -2,7 +2,7 @@ train:
   seed: 1999
   epochs: 50
   interval: 1
-  pretrain: backbones/spf_scannet_512_ref_backbone.pth
+  pretrain: backbones/sp_unet_backbone.pth
   save_epoch: 505
 
 test:
