@@ -112,7 +112,7 @@ python data/features/save_graph.py --split val --data_root data/ --max_len 78
 ```
 
 ### Preprocessed Features
-Download [preprocessed features](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=7xwkTs) (including superpoint features and language features), and put them as follows.
+Download [preprocessed features](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=IuZV0D) (including superpoint features and language features), and put them as follows.
 ```
 3D-STMN
 ├── data
@@ -133,7 +133,7 @@ Download [preprocessed features](https://stuxmueducn-my.sharepoint.com/:f:/g/per
 
 ## Pretrained Model
 
-Download [SPFormer](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=7xwkTs) pretrained model (We only use the Sparse 3D U-Net backbone for training).
+Download [SPFormer](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=IuZV0D) pretrained model (We only use the Sparse 3D U-Net backbone for training).
 
 Move the pretrained model to backbones.
 ```
@@ -154,7 +154,7 @@ bash scripts/train_multi_gpu.sh
 
 ## Inference
 
-Download [3D-STMN](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=7xwkTs) pretrain model and move it to checkpoints.
+Download [3D-STMN](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=IuZV0D) pretrain model and move it to checkpoints.
 
 ```
 bash scripts/test.sh
