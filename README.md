@@ -1,8 +1,6 @@
 # 3D-STMN (Preprocessed feature based)
 
-🔥This branch is based on preprocessed features, which further reduces computational overhead and is very friendly to GPUs with limited memory.🔥
-
-If you want to train the model in an end-to-end manner, please switch to the [main branch](https://github.com/sosppxo/3D-STMN/tree/main).
+🔥This branch is based on preprocessed features, which further reduces computational overhead and is very friendly to GPUs with limited memory. For end-to-end training, please switch to the [main branch](https://github.com/sosppxo/3D-STMN/tree/main).🔥
 
 [3D-STMN: Dependency-Driven Superpoint-Text Matching Network for End-to-End 3D Referring Expression Segmentation]()
 
