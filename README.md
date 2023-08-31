@@ -1,6 +1,6 @@
 # 3D-STMN
 
-🔥This branch is for end-to-end training. To save the GPU RAM by preprocessing features berfor training, please switch to the [feat branch](https://github.com/sosppxo/3D-STMN/tree/main).🔥
+🔥This branch is for end-to-end training. To save the GPU RAM by preprocessing features berfor training, please switch to the [feat branch](https://github.com/sosppxo/3D-STMN/tree/main) (only 7G of GPU RAM is needed for training).🔥
 
 [3D-STMN: Dependency-Driven Superpoint-Text Matching Network for End-to-End 3D Referring Expression Segmentation]()
 
