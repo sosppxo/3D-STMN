@@ -35,6 +35,7 @@ The following installation suppose `python=3.8` `pytorch=1.12.1` and `cuda=11.3`
 
   ```
   git clone https://github.com/sosppxo/3D-STMN.git
+  cd 3D-STMN && git checkout feat
   ```
 
 - Install the dependencies
