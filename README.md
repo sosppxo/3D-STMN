@@ -110,7 +110,7 @@ python data/features/save_graph.py --split train --data_root data/ --max_len 78
 python data/features/save_graph.py --split val --data_root data/ --max_len 78
 ```
 
-## Pretrained Model
+## Pretrained Backbone
 
 Download [SPFormer](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=IuZV0D) pretrained model (We only use the Sparse 3D U-Net backbone for training).
 
