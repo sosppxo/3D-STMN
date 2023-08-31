@@ -121,7 +121,7 @@ Download [preprocessed features](https://stuxmueducn-my.sharepoint.com/:f:/g/per
 │   │   │   ├── graph
 │   │   │   ├── lang
 │   │   │   │   ├── scene0000_00_002_000_graph_bert.pth
-│   │   │   ├──scans
+│   │   │   ├── scans
 │   │   │   │   ├── scene0000_00_spfeats.pth
 │   │   ├── val
 │   │   │   ├── graph
