@@ -195,10 +195,14 @@ class ScanNetDataset_sample_graph_edge(Dataset):
         return filenames
 
     def get_sp_filenames(self):
-        filenames = glob.glob(osp.join(self.data_root, 'scannetv2', self.prefix, '*' + '_refer.pth'))
+        sp_filenames = {}
+        filenames = glob.glob(osp.join(self.data_root, 'features', self.prefix, 'scans', '*_spfeats' + self.suffix))
         assert len(filenames) > 0, 'Empty dataset.'
         filenames = sorted(filenames)
-        return filenames
+        for filename in filenames:
+            scan_id = osp.basename(filename).replace('_spfeats'+self.suffix, '')
+            sp_filenames.update({scan_id: filename})
+        return sp_filenames
         
     def load(self, filename):
         if self.with_label:
@@ -344,13 +348,17 @@ class ScanNetDataset_sample_graph_edge(Dataset):
         lang_tokens = self.lang[scan_id][object_id][ann_id]
 
         # load point cloud
-        for fn in self.sp_filenames:
-            if scan_id in fn:
-                sp_filename = fn
-                break
-        data = self.load(sp_filename)
-        data = self.transform_train(*data) if self.training else self.transform_test(*data)
-        xyz, xyz_middle, rgb, superpoint, semantic_label, instance_label = data
+        sp_data = self.load(self.sp_filenames[scan_id])
+        sp_feat = sp_data['sp_feats']
+        superpoint = sp_data['superpoints']
+        instance_label = sp_data['instance_label']
+        semantic_label = sp_data['semantic_label']
+
+        lang_graph = self.load(filename.replace(self.suffix, '_graph_bert'+self.suffix))
+        lang_feat = lang_graph['lang_feats']
+        lang_mask = lang_graph['lang_masks']
+        gt_pmask = lang_graph['gt_pmask']
+        gt_spmask = lang_graph['gt_spmask']
 
 
         context_label = set()
@@ -372,7 +380,7 @@ class ScanNetDataset_sample_graph_edge(Dataset):
         point_ref_mask[instance_label == object_id] = 1
 
         g = dgl.load_graphs(self.graphs[osp.basename(filename)]['graph_file'])[0][0]
-        lang_tokens = self.graphs[osp.basename(filename)]['tokens']
+        # lang_tokens = self.graphs[osp.basename(filename)]['tokens']
 
         if self.bidirectional:
             try:
@@ -385,9 +393,8 @@ class ScanNetDataset_sample_graph_edge(Dataset):
                 if is_main_process():
                     self.logger.info('multigraph: '+scan_id+str(object_id).zfill(3)+str(ann_id).zfill(3))
 
-        coord = torch.from_numpy(xyz).long()
-        coord_float = torch.from_numpy(xyz_middle).float()
-        feat = torch.from_numpy(rgb).float()
+        sp_feat = torch.from_numpy(sp_feat).float()
+
         superpoint = torch.from_numpy(superpoint)
         semantic_label = torch.from_numpy(semantic_label).long()
         instance_label = torch.from_numpy(instance_label).long()
@@ -395,25 +402,29 @@ class ScanNetDataset_sample_graph_edge(Dataset):
         point_ref_mask = torch.from_numpy(point_ref_mask).float()
         sp_ref_mask = torch_scatter.scatter_mean(point_ref_mask, superpoint, dim=-1)
 
-        return ann_id, scan_id, coord, coord_float, feat, superpoint, object_id, gt_pmask, gt_spmask, sp_ref_mask , g, lang_tokens
+        lang_feat = torch.from_numpy(lang_feat).float()
+        lang_mask = torch.from_numpy(lang_mask).int()
+        # bert mask has cls and sep
+        assert g.num_nodes()+1 == lang_mask.sum().item()
+
+        return ann_id, scan_id, sp_feat, superpoint, object_id, gt_pmask, gt_spmask, sp_ref_mask , g, lang_feat, lang_mask
     
     def collate_fn(self, batch: Sequence[Sequence]) -> Dict:
-        ann_ids, scan_ids, coords, coords_float, feats, superpoints, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks, batched_graph, lang_tokenss, lang_masks, lang_words = [], [], [], [], [], [], [], [], [], [], [], [], [], []
+        ann_ids, scan_ids, sp_feats, superpoints, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks, batched_graph, lang_feats, lang_masks = [], [], [], [], [], [], [], [], [], [], []
         batch_offsets = [0]
         superpoint_bias = 0
 
         for i, data in enumerate(batch):
-            ann_id, scan_id, coord, coord_float, feat, src_superpoint, object_id, gt_pmask, gt_spmask, sp_ref_mask, g, lang_tokens = data
+            ann_id, scan_id, sp_feat, src_superpoint, object_id, gt_pmask, gt_spmask, sp_ref_mask, g, lang_feat, lang_mask = data
             
+            assert src_superpoint.max() == sp_feat.shape[0] - 1
             superpoint = src_superpoint + superpoint_bias
             superpoint_bias = superpoint.max().item() + 1
             batch_offsets.append(superpoint_bias)
 
             ann_ids.append(ann_id)
             scan_ids.append(scan_id)
-            coords.append(torch.cat([torch.LongTensor(coord.shape[0], 1).fill_(i), coord], 1))
-            coords_float.append(coord_float)
-            feats.append(feat)
+            sp_feats.append(sp_feat)
             superpoints.append(superpoint)
             
             object_ids.append(object_id)
@@ -422,38 +433,23 @@ class ScanNetDataset_sample_graph_edge(Dataset):
             gt_spmasks.append(gt_spmask)
             sp_ref_masks.append(sp_ref_mask)
             
-            token_dict = tokenizer.encode_plus(lang_tokens, add_special_tokens=True, truncation=True, max_length=self.max_des_len+2, padding='max_length', return_attention_mask=True,return_tensors='pt',)
-            assert len(lang_tokens) == g.num_nodes()-1
-            lang_words.append(lang_tokens)
-            lang_tokenss.append(token_dict['input_ids']) 
-            lang_masks.append(token_dict['attention_mask'])
+            lang_feats.append(lang_feat)
+            lang_masks.append(lang_mask)
 
             batched_graph.append(g)
 
-        batch_offsets = torch.tensor(batch_offsets, dtype=torch.int)  # int [B+1]
-        coords = torch.cat(coords, 0)  # long [B*N, 1 + 3], the batch item idx is put in b_xyz[:, 0]
-        coords_float = torch.cat(coords_float, 0)  # float [B*N, 3]
-        feats = torch.cat(feats, 0)  # float [B*N, 3]
-        superpoints = torch.cat(superpoints, 0).long()  # long [B*N, ]
-        if self.use_xyz:
-            feats = torch.cat((feats, coords_float), dim=1)
-        # voxelize
-        spatial_shape = np.clip((coords.max(0)[0][1:] + 1).numpy(), self.voxel_cfg.spatial_shape[0], None)  # long [3]
-        voxel_coords, p2v_map, v2p_map = pointgroup_ops.voxelization_idx(coords, len(batch), self.mode)
-
-        lang_tokenss = torch.cat(lang_tokenss, 0)
-        lang_masks = torch.cat(lang_masks, 0).int()
         # merge all scan in batch
+        batch_offsets = torch.tensor(batch_offsets, dtype=torch.int)  # int [B+1]
+        sp_feats = torch.cat(sp_feats, 0)  # float [B*N, 3]
+        superpoints = torch.cat(superpoints, 0).long()  # long [B*N, ]
         batched_graph = dgl.batch(batched_graph)
+        lang_feats = torch.cat(lang_feats, 0)
+        lang_masks = torch.cat(lang_masks, 0)
 
         return {
             'ann_ids': ann_ids,
             'scan_ids': scan_ids,
-            'voxel_coords': voxel_coords,
-            'p2v_map': p2v_map,
-            'v2p_map': v2p_map,
-            'spatial_shape': spatial_shape,
-            'feats': feats,
+            'sp_feats': sp_feats,
             'superpoints': superpoints,
             'batch_offsets': batch_offsets,
             'object_ids': object_ids,
@@ -461,6 +457,6 @@ class ScanNetDataset_sample_graph_edge(Dataset):
             'gt_spmasks': gt_spmasks,
             'sp_ref_masks': sp_ref_masks,
             'batched_graph': batched_graph,
-            'lang_tokenss': lang_tokenss,
-            'lang_masks': lang_masks,
+            'lang_feats': lang_feats,
+            'lang_masks': lang_masks
         }

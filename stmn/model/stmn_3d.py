@@ -105,15 +105,7 @@ class STMN(nn.Module):
             return self.predict(**batch)
 
     @cuda_cast
-    def loss(self, ann_ids, scan_ids, voxel_coords, p2v_map, v2p_map, spatial_shape, feats, superpoints, batch_offsets, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks, batched_graph, lang_tokenss, lang_masks):
-        batch_size = len(batch_offsets) - 1
-        voxel_feats = pointgroup_ops.voxelization(feats, v2p_map)
-        input = spconv.SparseConvTensor(voxel_feats, voxel_coords.int(), spatial_shape, batch_size)
-
-        sp_feats = self.extract_feat(input, superpoints, p2v_map)
-
-        lang_feats = self.bert_encoder(lang_tokenss, attention_mask=lang_masks)[0]
-
+    def loss(self, ann_ids, scan_ids, sp_feats, superpoints, batch_offsets, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks=None, batched_graph=None, lang_feats=None, lang_masks=None):
         out = self.stm(sp_feats, batch_offsets, batched_graph,  lang_feats, lang_masks) # sent_kernel [B, 1, 256]
         if self.sampling_module is not None:
             loss, loss_dict = self.criterion(out, gt_pmasks, gt_spmasks, sp_ref_masks)
@@ -122,14 +114,7 @@ class STMN(nn.Module):
         return loss, loss_dict
     
     @cuda_cast
-    def predict(self, ann_ids, scan_ids, voxel_coords, p2v_map, v2p_map, spatial_shape, feats, superpoints, batch_offsets, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks, batched_graph, lang_tokenss, lang_masks):
-        batch_size = len(batch_offsets) - 1
-        voxel_feats = pointgroup_ops.voxelization(feats, v2p_map)
-        input = spconv.SparseConvTensor(voxel_feats, voxel_coords.int(), spatial_shape, batch_size)
-        sp_feats = self.extract_feat(input, superpoints, p2v_map)
-
-        lang_feats = self.bert_encoder(lang_tokenss, attention_mask=lang_masks)[0]
-        
+    def predict(self, ann_ids, scan_ids, sp_feats, superpoints, batch_offsets, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks=None, batched_graph=None, lang_feats=None, lang_masks=None):
         out = self.stm(sp_feats, batch_offsets, batched_graph,  lang_feats, lang_masks) # sent_kernel [B, 1, 256]
         ret = self.predict_by_feat(scan_ids, object_ids, ann_ids, out, superpoints, gt_pmasks, gt_spmasks)
 
