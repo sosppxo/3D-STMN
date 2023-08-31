@@ -1,5 +1,7 @@
 # 3D-STMN
 
+🔥This branch is for end-to-end training. To save the GPU RAM by preprocessing features berfor training, please switch to the [feat branch](https://github.com/sosppxo/3D-STMN/tree/main).🔥
+
 [3D-STMN: Dependency-Driven Superpoint-Text Matching Network for End-to-End 3D Referring Expression Segmentation]()
 
 Changli Wu, Yiwei Ma, Qi Chen, Haowei Wang, Gen Luo, Jiayi Ji*, Xiaoshuai Sun
@@ -110,7 +112,7 @@ python data/features/save_graph.py --split val --data_root data/ --max_len 78
 
 ## Pretrained Model
 
-Download [SPFormer](?????????????????) pretrained model (We only use the Sparse 3D U-Net backbone for training).
+Download [SPFormer](https://stuxmueducn-my.sharepoint.com/personal/22920182204313_stu_xmu_edu_cn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2F22920182204313%5Fstu%5Fxmu%5Fedu%5Fcn%2FDocuments%2F3D%2DSTMN&ga=1) pretrained model (We only use the Sparse 3D U-Net backbone for training).
 
 Move the pretrained model to backbones.
 ```
@@ -131,7 +133,7 @@ bash scripts/train_multi_gpu.sh
 
 ## Inference
 
-Download [3D-STMN](????????????) pretrain model and move it to checkpoints.
+Download [3D-STMN](https://stuxmueducn-my.sharepoint.com/personal/22920182204313_stu_xmu_edu_cn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2F22920182204313%5Fstu%5Fxmu%5Fedu%5Fcn%2FDocuments%2F3D%2DSTMN&ga=1) pretrain model and move it to checkpoints.
 
 ```
 bash scripts/test.sh
