@@ -131,7 +131,7 @@ Download [preprocessed features](https://stuxmueducn-my.sharepoint.com/:f:/g/per
 │   │   │   │   ├── scene0011_00_spfeats.pth
 ```
 
-## Pretrained Model
+## Pretrained Backbone
 
 Download [SPFormer](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=IuZV0D) pretrained model (We only use the Sparse 3D U-Net backbone for training).
 
