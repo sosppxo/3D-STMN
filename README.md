@@ -62,7 +62,7 @@ The following installation suppose `python=3.8` `pytorch=1.12.1` and `cuda=11.3`
 
 ## Data Preparation
 
-### ScanNet v2 dataset
+### ScanNet v2 dataset (Optional)
 
 Download the [ScanNet](http://www.scan-net.org/) v2 dataset.
 
