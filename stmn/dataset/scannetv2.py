@@ -354,12 +354,11 @@ class ScanNetDataset_sample_graph_edge(Dataset):
         instance_label = sp_data['instance_label']
         semantic_label = sp_data['semantic_label']
 
-        lang_graph = self.load(filename.replace(self.suffix, '_graph_bert'+self.suffix))
+        lang_graph = self.load(filename.replace('graph', 'lang').replace(self.suffix, '_graph_bert'+self.suffix))
         lang_feat = lang_graph['lang_feats']
         lang_mask = lang_graph['lang_masks']
         gt_pmask = lang_graph['gt_pmask']
         gt_spmask = lang_graph['gt_spmask']
-
 
         context_label = set()
         for word in lang_tokens:
