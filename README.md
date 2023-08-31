@@ -31,7 +31,7 @@ The following installation suppose `python=3.8` `pytorch=1.12.1` and `cuda=11.3`
   conda activate 3d-stmn
   ```
 
-- Clone the repository
+- Clone the repository and Switch to branch 'feat'
 
   ```
   git clone https://github.com/sosppxo/3D-STMN.git
