@@ -1,4 +1,8 @@
-# 3D-STMN
+# 3D-STMN (Preprocessed feature based)
+
+🔥This branch is based on preprocessed features, which further reduces computational overhead and is very friendly to GPUs with limited memory.🔥
+
+If you want to train the model in an end-to-end manner, please switch to the [main branch](https://github.com/sosppxo/3D-STMN/tree/main).
 
 [3D-STMN: Dependency-Driven Superpoint-Text Matching Network for End-to-End 3D Referring Expression Segmentation]()
 
@@ -108,9 +112,29 @@ python data/features/save_graph.py --split train --data_root data/ --max_len 78
 python data/features/save_graph.py --split val --data_root data/ --max_len 78
 ```
 
+### Preprocessed Features
+Download [preprocessed features](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=7xwkTs) (including superpoint features and language features), and put them as follows.
+```
+3D-STMN
+├── data
+│   ├── features
+│   │   ├── train
+│   │   │   ├── graph
+│   │   │   ├── lang
+│   │   │   │   ├── scene0000_00_002_000_graph_bert.pth
+│   │   │   ├──scans
+│   │   │   │   ├── scene0000_00_spfeats.pth
+│   │   ├── val
+│   │   │   ├── graph
+│   │   │   ├── lang
+│   │   │   │   ├── scene0011_00_001_000_graph_bert.pth
+│   │   │   ├── scans
+│   │   │   │   ├── scene0011_00_spfeats.pth
+```
+
 ## Pretrained Model
 
-Download [SPFormer](?????????????????) pretrained model (We only use the Sparse 3D U-Net backbone for training).
+Download [SPFormer](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=7xwkTs) pretrained model (We only use the Sparse 3D U-Net backbone for training).
 
 Move the pretrained model to backbones.
 ```
@@ -119,19 +143,19 @@ mv ${Download_PATH}/sp_unet_backbone.pth backbones/
 ```
 
 ## Training
-For single GPU (40G):
+For single GPU :
 
 ```
 bash scripts/train.sh
 ```
-For multi-GPU (11G * 4 or 24G * 2):
+For multi-GPU :
 ```
 bash scripts/train_multi_gpu.sh
 ```
 
 ## Inference
 
-Download [3D-STMN](????????????) pretrain model and move it to checkpoints.
+Download [3D-STMN](https://stuxmueducn-my.sharepoint.com/:f:/g/personal/22920182204313_stu_xmu_edu_cn/Em7yJHaCHAxFpM15uVwk9cgByDp-67lWQg59vkU-zokHYA?e=7xwkTs) pretrain model and move it to checkpoints.
 
 ```
 bash scripts/test.sh
