@@ -56,7 +56,7 @@ class STMN(nn.Module):
         )
         self.output_layer = spconv.SparseSequential(norm_fn(media), nn.ReLU(inplace=True))
         self.pool = pool
-
+        self.sp_norm = nn.BatchNorm1d(media, eps=1e-4, momentum=0.1)
         self.decoder_param = stm
 
         # bert encoder
@@ -106,6 +106,7 @@ class STMN(nn.Module):
 
     @cuda_cast
     def loss(self, ann_ids, scan_ids, sp_feats, superpoints, batch_offsets, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks=None, batched_graph=None, lang_feats=None, lang_masks=None):
+        sp_feats = self.sp_norm(sp_feats)
         out = self.stm(sp_feats, batch_offsets, batched_graph,  lang_feats, lang_masks) # sent_kernel [B, 1, 256]
         if self.sampling_module is not None:
             loss, loss_dict = self.criterion(out, gt_pmasks, gt_spmasks, sp_ref_masks)
@@ -115,6 +116,7 @@ class STMN(nn.Module):
     
     @cuda_cast
     def predict(self, ann_ids, scan_ids, sp_feats, superpoints, batch_offsets, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks=None, batched_graph=None, lang_feats=None, lang_masks=None):
+        sp_feats = self.sp_norm(sp_feats)
         out = self.stm(sp_feats, batch_offsets, batched_graph,  lang_feats, lang_masks) # sent_kernel [B, 1, 256]
         ret = self.predict_by_feat(scan_ids, object_ids, ann_ids, out, superpoints, gt_pmasks, gt_spmasks)
 
