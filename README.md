@@ -2,7 +2,7 @@
 
 🔥This branch is for end-to-end training (about 36G of GPU RAM is needed). To save the GPU RAM by preprocessing features berfor training, please switch to the [feat branch](https://github.com/sosppxo/3D-STMN/tree/feat) (only 7G of GPU RAM is needed for training).🔥
 
-[3D-STMN: Dependency-Driven Superpoint-Text Matching Network for End-to-End 3D Referring Expression Segmentation]()
+[3D-STMN: Dependency-Driven Superpoint-Text Matching Network for End-to-End 3D Referring Expression Segmentation](https://arxiv.org/abs/2308.16632)
 
 Changli Wu, Yiwei Ma, Qi Chen, Haowei Wang, Gen Luo, Jiayi Ji*, Xiaoshuai Sun
 
@@ -144,7 +144,11 @@ bash scripts/test.sh
 If you find this work useful in your research, please cite:
 
 ```
-@misc{
+@misc{2308.16632,
+Author = {Changli Wu and Yiwei Ma and Qi Chen and Haowei Wang and Gen Luo and Jiayi Ji and Xiaoshuai Sun},
+Title = {3D-STMN: Dependency-Driven Superpoint-Text Matching Network for End-to-End 3D Referring Expression Segmentation},
+Year = {2023},
+Eprint = {arXiv:2308.16632},
 }
 ```
 
