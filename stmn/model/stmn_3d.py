@@ -56,7 +56,7 @@ class STMN(nn.Module):
         )
         self.output_layer = spconv.SparseSequential(norm_fn(media), nn.ReLU(inplace=True))
         self.pool = pool
-        self.sp_norm = nn.BatchNorm1d(media, eps=1e-4, momentum=0.1)
+        self.sp_norm = nn.LayerNorm(media)
         self.decoder_param = stm
 
         # bert encoder
@@ -122,7 +122,6 @@ class STMN(nn.Module):
 
         return ret
     
-      
     def predict_by_feat(self, scan_ids, object_ids, ann_ids, out, superpoints, gt_pmasks, gt_spmasks):
         # B is 1 when predecit
         gt_pmask = gt_pmasks[0]
