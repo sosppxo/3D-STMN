@@ -121,7 +121,7 @@ mv ${Download_PATH}/sp_unet_backbone.pth backbones/
 ```
 
 ## Training
-For single GPU (40G):
+For single GPU (32G):
 
 ```
 bash scripts/train.sh
