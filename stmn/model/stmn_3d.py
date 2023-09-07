@@ -116,7 +116,7 @@ class STMN(nn.Module):
     
     @cuda_cast
     def predict(self, ann_ids, scan_ids, sp_feats, superpoints, batch_offsets, object_ids, gt_pmasks, gt_spmasks, sp_ref_masks=None, batched_graph=None, lang_feats=None, lang_masks=None):
-        sp_feats = self.sp_norm(sp_feats)
+        # sp_feats = self.sp_norm(sp_feats)
         out = self.stm(sp_feats, batch_offsets, batched_graph,  lang_feats, lang_masks) # sent_kernel [B, 1, 256]
         ret = self.predict_by_feat(scan_ids, object_ids, ann_ids, out, superpoints, gt_pmasks, gt_spmasks)
 
