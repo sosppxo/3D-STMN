@@ -279,6 +279,7 @@ class STM(nn.Module):
             attn_masks = (pred_masks.sigmoid() < 0.5).bool() # [B, 1, num_sp]
             attn_masks = attn_masks | batch_mask.unsqueeze(1)
             attn_masks[torch.where(attn_masks.sum(-1) == attn_masks.shape[-1])] = False
+            attn_masks = attn_masks | batch_mask.unsqueeze(1)
             attn_masks = attn_masks.detach()
         else:
             attn_masks = None
