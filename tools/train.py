@@ -131,14 +131,14 @@ def eval(epoch, best_iou, model, dataloader, cfg, logger, writer, save_ckp=False
         spmiou = spious.mean()
 
         writer.add_scalar('val/mIOU', miou, epoch)
-        writer.add_scalar('val/AP_50', precision_half, epoch)
-        writer.add_scalar('val/AP_25', precision_quarter, epoch)
+        writer.add_scalar('val/Acc_50', precision_half, epoch)
+        writer.add_scalar('val/Acc_25', precision_quarter, epoch)
         writer.add_scalar('val/spmIOU', spmiou, epoch)
-        writer.add_scalar('val/spAP_50', spprecision_half, epoch)
-        writer.add_scalar('val/spAP_25', spprecision_quarter, epoch)
-        logger.info('mIOU: {:.3f}. AP_50: {:.3f}. AP_25: {:.3f}'.format(miou, precision_half,
+        writer.add_scalar('val/spAcc_50', spprecision_half, epoch)
+        writer.add_scalar('val/spAcc_25', spprecision_quarter, epoch)
+        logger.info('mIOU: {:.3f}. Acc_50: {:.3f}. Acc_25: {:.3f}'.format(miou, precision_half,
                                                                     precision_quarter))
-        logger.info('spmIOU: {:.3f}. spAP_50: {:.3f}. spAP_25: {:.3f}'.format(spmiou, spprecision_half,
+        logger.info('spmIOU: {:.3f}. spAcc_50: {:.3f}. spAcc_25: {:.3f}'.format(spmiou, spprecision_half,
                                                                       spprecision_quarter))
     if gorilla.is_main_process() and save_ckp:
         # save
