@@ -14,7 +14,7 @@ from stmn.model import STMN
 from stmn.utils import AverageMeter, get_root_logger
 
 def get_args():
-    parser = argparse.ArgumentParser('SPFormer')
+    parser = argparse.ArgumentParser('3D-STMN')
     parser.add_argument('config', type=str, help='path to config file')
     parser.add_argument('--resume', type=str, help='path to resume from')
     parser.add_argument('--work_dir', type=str, help='working directory')

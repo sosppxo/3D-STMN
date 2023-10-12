@@ -9,7 +9,7 @@ from stmn.utils import get_root_logger, save_pred_instances
 import json
 
 def get_args():
-    parser = argparse.ArgumentParser('SoftGroup')
+    parser = argparse.ArgumentParser('3D-STMN')
     parser.add_argument('config', type=str, help='path to config file')
     parser.add_argument('--checkpoint', type=str, help='path to checkpoint')
     parser.add_argument('--out', default=None, type=str, help='directory for output results')
