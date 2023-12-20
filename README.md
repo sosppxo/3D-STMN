@@ -1,4 +1,5 @@
 # 3D-STMN (Preprocessed feature based)
+NEWS:🔥3D-STMN is accepted at AAAI 2024!🔥
 
 🔥This branch is based on preprocessed features, which further reduces computational overhead and is very friendly to GPUs with limited memory (only 7G of GPU RAM is needed for training). For end-to-end training, please switch to the [main branch](https://github.com/sosppxo/3D-STMN/tree/main).🔥
 
