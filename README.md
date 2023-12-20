@@ -1,4 +1,5 @@
 # 3D-STMN
+NEWS:🔥3D-STMN is accepted at AAAI 2024!🔥
 
 🔥This branch is for end-to-end training (about 31G of GPU RAM is needed). To save the GPU RAM by preprocessing features before training, please switch to the [feat branch](https://github.com/sosppxo/3D-STMN/tree/feat) (only 7G of GPU RAM is needed for training).🔥
 
